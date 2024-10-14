@@ -24,7 +24,7 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
-        name: latest
+        name: ani-rss-update
         tag_name: latest
         append_body: false
         token: ${{ secrets.GITHUB_TOKEN }}
