@@ -10,7 +10,7 @@ import (
 
 func main() {
 	args := os.Args[1:]
-	if len(args) != 1 {
+	if len(args) < 1 {
 		fmt.Println("参数为空")
 		return
 	}
@@ -36,7 +36,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	err = exec.Command(exe).Run()
+	err = exec.Command(exe, args[1:]...).Run()
 	if err != nil {
 		fmt.Println(err)
 		return
