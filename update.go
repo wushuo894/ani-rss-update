@@ -42,7 +42,7 @@ func main() {
 		return
 	}
 	fmt.Println("更新成功")
-	time.Sleep(5 * time.Second)
+	time.Sleep(3 * time.Second)
 }
 
 func fileExists(filename string) bool {
