@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"time"
 )
 
@@ -14,9 +13,8 @@ func main() {
 		fmt.Println("参数为空")
 		return
 	}
-	path := args[0]
-	exe := filepath.Join(path, "ani-rss-launcher.exe")
-	updateTmp := filepath.Join(path, "ani-rss-launcher.exe.tmp")
+	exe := args[0]
+	updateTmp := exe + ".tmp"
 	time.Sleep(1 * time.Second)
 	if !fileExists(exe) {
 		fmt.Println("不存在: ", exe)
