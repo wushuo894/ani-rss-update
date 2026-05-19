@@ -1,49 +1,72 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
 func main() {
-	args := os.Args[1:]
-	if len(args) < 1 {
-		writeLog("参数为空", "ERROR")
+	var source string
+	var target string
+	var args string
+
+	flag.StringVar(&source, "source", "", "源文件路径")
+	flag.StringVar(&target, "target", "", "目标文件路径")
+	flag.StringVar(&args, "args", "", "启动参数")
+	flag.Parse()
+
+	writeLog("==========", "INFO")
+	writeLog("source: "+source, "INFO")
+	writeLog("target: "+target, "INFO")
+	writeLog("args: "+args, "INFO")
+
+	if source == "" || target == "" {
+		writeLog("source 和 target 参数不能为空", "ERROR")
 		return
 	}
-	exe := args[0]
-	updateTmp := exe + ".tmp"
+
 	time.Sleep(2 * time.Second)
-	if !fileExists(exe) {
-		writeLog("不存在: "+exe, "ERROR")
+
+	if !fileExists(source) {
+		writeLog("不存在: "+source, "ERROR")
 		return
 	}
-	if !fileExists(updateTmp) {
-		writeLog("不存在: "+updateTmp, "ERROR")
+	if !fileExists(target) {
+		writeLog("不存在: "+target, "ERROR")
 		return
 	}
-	err := os.Remove(exe)
+
+	// 删除旧版
+	err := os.Remove(target)
 	if err != nil {
 		writeLog("删除文件错误: "+err.Error(), "ERROR")
 		return
 	}
-	err = os.Rename(updateTmp, exe)
+
+	// 将新版重命名
+	err = os.Rename(source, target)
 	if err != nil {
 		writeLog("重命名错误: "+err.Error(), "ERROR")
 		return
 	}
 
-	err = exec.Command(exe, args[1:]...).Run()
+	var cmdArgs []string
+	if args != "" {
+		cmdArgs = strings.Split(args, " ")
+	}
+
+	err = exec.Command(target, cmdArgs...).Run()
 	if err != nil {
 		writeLog("重启程序错误: "+err.Error(), "ERROR")
 		return
 	}
 	writeLog("更新成功", "INFO")
 
-	// 等待3秒, 确保程序已退出
 	time.Sleep(2 * time.Second)
 }
 
