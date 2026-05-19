@@ -13,21 +13,21 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-    - name: Set up Go
-      uses: actions/setup-go@v6
-      with:
-        go-version: '1.26.3'
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.3'
 
-    - name: Build
-      run: GOOS=windows GOARCH=amd64 go build
+      - name: Build
+        run: GOOS=windows GOARCH=amd64 go build
 
-    - name: Release
-      uses: softprops/action-gh-release@v2
-      with:
-        name: ani-rss-update
-        body: 1.0.3
-        tag_name: latest
-        append_body: false
-        token: ${{ secrets.GITHUB_TOKEN }}
-        files: |
-          ./ani-rss-update.exe
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ani-rss-update
+          body: 1.0.3
+          tag_name: latest
+          append_body: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            ./ani-rss-update.exe
